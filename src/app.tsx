@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import ReactFlow, {
   Node,
   Edge,
@@ -16,34 +16,11 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './App.css';
-
-const initialNodes: Node[] = [
-  {
-    id: '1',
-    type: 'input',
-    data: { label: 'Node 1' },
-    position: { x: 250, y: 5 },
-  },
-  {
-    id: '2',
-    data: { label: 'Node 2' },
-    position: { x: 100, y: 100 },
-  },
-  {
-    id: '3',
-    data: { label: 'Node 3' },
-    position: { x: 400, y: 100 },
-  },
-];
-
-const initialEdges: Edge[] = [
-  { id: 'e1-2', source: '1', target: '2', data: { note: 'Connection 1-2' } },
-  { id: 'e1-3', source: '1', target: '3', data: { note: 'Connection 1-3' } },
-];
+import { parseCSV } from './utils/dataParser';
 
 function App() {
-  const [nodes, setNodes] = useNodesState(initialNodes);
-  const [edges, setEdges] = useEdgesState(initialEdges);
+  const [nodes, setNodes] = useNodesState([]);
+  const [edges, setEdges] = useEdgesState([]);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -67,8 +44,30 @@ function App() {
     [setEdges]
   );
 
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const { nodes: newNodes, edges: newEdges } = await parseCSV(file);
+      setNodes(newNodes);
+      setEdges(newEdges);
+    } catch (error) {
+      console.error('Error parsing CSV:', error);
+      alert('Error parsing CSV file. Please check the format and try again.');
+    }
+  };
+
   return (
     <div className="app">
+      <div className="upload-container">
+        <input
+          type="file"
+          accept=".csv"
+          onChange={handleFileUpload}
+          style={{ margin: '10px' }}
+        />
+      </div>
       <div className="graph-container">
         <ReactFlow
           nodes={nodes}
