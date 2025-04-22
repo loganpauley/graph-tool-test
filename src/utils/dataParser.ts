@@ -51,6 +51,7 @@ const transformData = (data: any[]): { nodes: Node[]; edges: Edge[] } => {
     if (!nodeMap.has(sourceName)) {
       nodes.push({
         id: sourceName,
+        type: 'default',
         data: { label: sourceName },
         position: { x: Math.random() * 800, y: Math.random() * 600 },
       });
@@ -60,6 +61,7 @@ const transformData = (data: any[]): { nodes: Node[]; edges: Edge[] } => {
     if (!nodeMap.has(targetName)) {
       nodes.push({
         id: targetName,
+        type: 'default',
         data: { label: targetName },
         position: { x: Math.random() * 800, y: Math.random() * 600 },
       });
@@ -71,7 +73,14 @@ const transformData = (data: any[]): { nodes: Node[]; edges: Edge[] } => {
       id: `e${sourceName}-${targetName}-${index}`,
       source: sourceName,
       target: targetName,
-      data: { ...row },
+      data: { 
+        ...row,
+        label: 'Click to edit',
+        labelStyle: { fill: '#000', fontWeight: 700 },
+        labelBgStyle: { fill: '#fff', fillOpacity: 0.7 },
+        labelBgPadding: [4, 4],
+        labelBgBorderRadius: 4,
+      },
     });
   });
 

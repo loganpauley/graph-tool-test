@@ -11,6 +11,8 @@ import ReactFlow, {
   useEdgesState,
   applyNodeChanges,
   applyEdgeChanges,
+  NodeTypes,
+  EdgeTypes,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './App.css';
@@ -79,6 +81,7 @@ function App() {
       id: newNodeName,
       data: { label: newNodeName },
       position: { x: Math.random() * 800, y: Math.random() * 600 },
+      type: 'default',
     };
 
     setNodes((nds) => [...nds, newNode]);
@@ -132,7 +135,8 @@ function App() {
             borderRadius: '4px',
             cursor: 'pointer',
             fontSize: '14px',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            zIndex: 1000
           }}
         >
           Add New Node
@@ -150,6 +154,22 @@ function App() {
           fitView
           defaultViewport={{ x: 0, y: 0, zoom: 1 }}
           style={{ width: '100%', height: '100%' }}
+          nodesDraggable={true}
+          nodesConnectable={true}
+          elementsSelectable={true}
+          panOnDrag={true}
+          zoomOnScroll={true}
+          attributionPosition="bottom-right"
+          minZoom={0.5}
+          maxZoom={2}
+          defaultEdgeOptions={{
+            animated: false,
+            style: { stroke: '#b1b1b7', strokeWidth: 2 },
+            labelStyle: { fill: '#000', fontWeight: 700 },
+            labelBgStyle: { fill: '#fff', fillOpacity: 0.7 },
+            labelBgPadding: [4, 4],
+            labelBgBorderRadius: 4,
+          }}
         >
           <Background />
           <Controls style={{ position: 'absolute', right: 10, top: 10 }} />
