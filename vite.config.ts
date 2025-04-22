@@ -5,8 +5,8 @@ export default defineConfig({
   plugins: [react()],
   base: '/graph-tool-test/',
   build: {
-    outDir: '.',
-    emptyOutDir: false
+    outDir: 'docs',
+    emptyOutDir: true
   },
   server: {
     port: 5173,
