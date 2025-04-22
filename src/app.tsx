@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import ReactFlow, {
   addEdge,
   Connection,
@@ -11,6 +11,7 @@ import ReactFlow, {
   useEdgesState,
   applyNodeChanges,
   applyEdgeChanges,
+  Panel,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './App.css';
@@ -19,6 +20,9 @@ import { parseCSV } from './utils/dataParser';
 function App() {
   const [nodes, setNodes] = useNodesState([]);
   const [edges, setEdges] = useEdgesState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newNodeName, setNewNodeName] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -46,6 +50,7 @@ function App() {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    setIsLoading(true);
     try {
       const { nodes: newNodes, edges: newEdges } = await parseCSV(file);
       setNodes(newNodes);
@@ -53,7 +58,27 @@ function App() {
     } catch (error) {
       console.error('Error parsing CSV:', error);
       alert('Error parsing CSV file. Please check the format and try again.');
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const handleAddNode = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCreateNode = () => {
+    if (!newNodeName.trim()) return;
+
+    const newNode = {
+      id: newNodeName,
+      data: { label: newNodeName },
+      position: { x: Math.random() * 800, y: Math.random() * 600 },
+    };
+
+    setNodes((nds) => [...nds, newNode]);
+    setNewNodeName('');
+    setIsModalOpen(false);
   };
 
   return (
@@ -65,6 +90,10 @@ function App() {
           onChange={handleFileUpload}
           style={{ margin: '10px' }}
         />
+        <button onClick={handleAddNode} style={{ margin: '10px', padding: '5px 10px' }}>
+          Add New Node
+        </button>
+        {isLoading && <div style={{ margin: '10px' }}>Processing file...</div>}
       </div>
       <div className="graph-container">
         <ReactFlow
@@ -75,12 +104,36 @@ function App() {
           onConnect={onConnect}
           fitView
           defaultViewport={{ x: 0, y: 0, zoom: 1 }}
+          connectionMode="loose"
         >
           <Background />
           <Controls />
           <MiniMap />
         </ReactFlow>
       </div>
+
+      {isModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Create New Node</h3>
+            <input
+              type="text"
+              value={newNodeName}
+              onChange={(e) => setNewNodeName(e.target.value)}
+              placeholder="Enter node name"
+              style={{ margin: '10px 0', padding: '5px' }}
+            />
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button onClick={handleCreateNode} style={{ padding: '5px 10px' }}>
+                Create
+              </button>
+              <button onClick={() => setIsModalOpen(false)} style={{ padding: '5px 10px' }}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
