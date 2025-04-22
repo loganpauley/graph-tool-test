@@ -47,7 +47,17 @@
 }
 
 .react-flow__edge-text {
-    font-size: 10px;
+    font-size: 12px;
+    pointer-events: all;
+}
+
+.react-flow__edge-textbg {
+    fill: white;
+    fill-opacity: 0.7;
+}
+
+.react-flow__edge:hover .react-flow__edge-path {
+    stroke: #555;
 }
 
 .modal {

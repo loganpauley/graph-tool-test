@@ -43,6 +43,10 @@ function App() {
         ...connection,
         id: `e${connection.source}-${connection.target}`,
         data: { label: 'Click to edit' },
+        labelStyle: { fill: '#000', fontWeight: 700 },
+        labelBgStyle: { fill: '#fff', fillOpacity: 0.7 },
+        labelBgPadding: [4, 4],
+        labelBgBorderRadius: 4,
       };
       setEdges((eds) => addEdge(newEdge, eds));
     },
@@ -94,7 +98,14 @@ function App() {
       setEdges((eds) =>
         eds.map((edge) =>
           edge.id === editingEdge
-            ? { ...edge, data: { ...edge.data, label: edgeLabel } }
+            ? { 
+                ...edge, 
+                data: { ...edge.data, label: edgeLabel },
+                labelStyle: { fill: '#000', fontWeight: 700 },
+                labelBgStyle: { fill: '#fff', fillOpacity: 0.7 },
+                labelBgPadding: [4, 4],
+                labelBgBorderRadius: 4,
+              }
             : edge
         )
       );
