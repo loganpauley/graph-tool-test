@@ -1,6 +1,6 @@
 # Graph Visualization Tool
 
-A powerful, interactive graph visualization tool built with React and ReactFlow. This tool allows you to create, edit, and visualize complex networks with ease.
+I made this graph visualization tool with React and ReactFlow to test out some functioanlity for synthetic edges. This tool allows you to create, edit, and visualize complex networks with ease.
 
 ![Graph Tool Screenshot](docs/assets/graph-tool-screenshot.png)
 
