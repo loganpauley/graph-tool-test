@@ -11,8 +11,6 @@ import ReactFlow, {
   useEdgesState,
   applyNodeChanges,
   applyEdgeChanges,
-  NodeTypes,
-  EdgeTypes,
   Node,
   useReactFlow,
 } from 'reactflow';
@@ -37,7 +35,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [editingEdge, setEditingEdge] = useState<string | null>(null);
   const [edgeLabel, setEdgeLabel] = useState('');
-  const [selectedNode, setSelectedNode] = useState<string | null>(null);
   const { fitView } = useReactFlow();
 
   const onNodesChange = useCallback(
@@ -133,7 +130,6 @@ function App() {
   };
 
   const handleNodeClick = (_event: React.MouseEvent, node: Node) => {
-    setSelectedNode(node.id);
     organizeHierarchy(node.id);
   };
 
