@@ -11,9 +11,8 @@ import ReactFlow, {
   useEdgesState,
   applyNodeChanges,
   applyEdgeChanges,
-  NodeTypes,
-  EdgeTypes,
   Node,
+  useReactFlow,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './App.css';
