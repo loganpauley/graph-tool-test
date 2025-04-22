@@ -11,12 +11,11 @@ import ReactFlow, {
   useEdgesState,
   applyNodeChanges,
   applyEdgeChanges,
-  NodeTypes,
-  EdgeTypes,
   Node,
+  useReactFlow,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import './App.css';
+import './app.css';
 import { parseCSV } from './utils/dataParser';
 
 // Define custom node types
@@ -36,6 +35,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [editingEdge, setEditingEdge] = useState<string | null>(null);
   const [edgeLabel, setEdgeLabel] = useState('');
+  const { fitView } = useReactFlow();
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -129,6 +129,52 @@ function App() {
     }
   };
 
+  const handleNodeClick = (_event: React.MouseEvent, node: Node) => {
+    organizeHierarchy(node.id);
+  };
+
+  const organizeHierarchy = (rootNodeId: string) => {
+    const visited = new Set<string>();
+    const queue: { nodeId: string; level: number }[] = [{ nodeId: rootNodeId, level: 0 }];
+    const newPositions: { [key: string]: { x: number; y: number } } = {};
+
+    // Find all nodes connected to the root node
+    while (queue.length > 0) {
+      const { nodeId, level } = queue.shift()!;
+      if (visited.has(nodeId)) continue;
+      visited.add(nodeId);
+
+      // Calculate position based on level
+      const x = level * 200; // Horizontal spacing
+      const y = (visited.size - 1) * 100; // Vertical spacing
+
+      newPositions[nodeId] = { x, y };
+
+      // Find connected nodes
+      edges.forEach(edge => {
+        if (edge.source === nodeId && !visited.has(edge.target)) {
+          queue.push({ nodeId: edge.target, level: level + 1 });
+        }
+      });
+    }
+
+    // Update node positions
+    setNodes(nds => 
+      nds.map(node => {
+        if (newPositions[node.id]) {
+          return {
+            ...node,
+            position: newPositions[node.id],
+          };
+        }
+        return node;
+      })
+    );
+
+    // Fit view to show all nodes
+    setTimeout(() => fitView({ duration: 800 }), 100);
+  };
+
   return (
     <div className="app">
       <div className="upload-container">
@@ -165,6 +211,7 @@ function App() {
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           onEdgeClick={handleEdgeClick}
+          onNodeClick={handleNodeClick}
           fitView
           defaultViewport={{ x: 0, y: 0, zoom: 1 }}
           style={{ width: '100%', height: '100%' }}

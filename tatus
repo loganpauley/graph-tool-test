@@ -1,0 +1,5 @@
+[33mf125cd4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Fix TypeScript errors and build issues
+[33mee67a20[m Add hierarchical node organization on click and update edge label styling
+[33mc0f3c59[m Update edge label styling and positioning
+[33m204b796[m Update configuration for GitHub Pages deployment
+[33mec7d0bb[m Update app with working node creation and edge labels
