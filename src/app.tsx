@@ -15,7 +15,7 @@ import ReactFlow, {
   useReactFlow,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import './App.css';
+import './app.css';
 import { parseCSV } from './utils/dataParser';
 
 // Define custom node types
