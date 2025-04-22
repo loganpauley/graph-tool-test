@@ -12,6 +12,7 @@ import ReactFlow, {
   applyNodeChanges,
   applyEdgeChanges,
   Panel,
+  EdgeText,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './App.css';
@@ -23,6 +24,8 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newNodeName, setNewNodeName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [editingEdge, setEditingEdge] = useState<string | null>(null);
+  const [edgeLabel, setEdgeLabel] = useState('');
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -39,7 +42,7 @@ function App() {
       const newEdge = {
         ...connection,
         id: `e${connection.source}-${connection.target}`,
-        data: { note: `Connection ${connection.source}-${connection.target}` },
+        data: { label: 'Click to edit' },
       };
       setEdges((eds) => addEdge(newEdge, eds));
     },
@@ -81,6 +84,25 @@ function App() {
     setIsModalOpen(false);
   };
 
+  const handleEdgeClick = (event: React.MouseEvent, edge: any) => {
+    setEditingEdge(edge.id);
+    setEdgeLabel(edge.data?.label || '');
+  };
+
+  const handleEdgeLabelSubmit = () => {
+    if (editingEdge) {
+      setEdges((eds) =>
+        eds.map((edge) =>
+          edge.id === editingEdge
+            ? { ...edge, data: { ...edge.data, label: edgeLabel } }
+            : edge
+        )
+      );
+      setEditingEdge(null);
+      setEdgeLabel('');
+    }
+  };
+
   return (
     <div className="app">
       <div className="upload-container">
@@ -102,6 +124,7 @@ function App() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
+          onEdgeClick={handleEdgeClick}
           fitView
           defaultViewport={{ x: 0, y: 0, zoom: 1 }}
           connectionMode="loose"
@@ -128,6 +151,29 @@ function App() {
                 Create
               </button>
               <button onClick={() => setIsModalOpen(false)} style={{ padding: '5px 10px' }}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {editingEdge && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Edit Edge Label</h3>
+            <input
+              type="text"
+              value={edgeLabel}
+              onChange={(e) => setEdgeLabel(e.target.value)}
+              placeholder="Enter edge label"
+              style={{ margin: '10px 0', padding: '5px' }}
+            />
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button onClick={handleEdgeLabelSubmit} style={{ padding: '5px 10px' }}>
+                Save
+              </button>
+              <button onClick={() => setEditingEdge(null)} style={{ padding: '5px 10px' }}>
                 Cancel
               </button>
             </div>
