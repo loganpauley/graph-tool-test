@@ -35,7 +35,6 @@ const transformData = (data: any[]): { nodes: Node[]; edges: Edge[] } => {
   const nodes: Node[] = [];
   const edges: Edge[] = [];
   const nodeMap = new Map<string, Node>();
-  let nodeCount = 0;
 
   // Process each row in the CSV
   data.forEach((row, index) => {
