@@ -12,7 +12,6 @@ import ReactFlow, {
   applyNodeChanges,
   applyEdgeChanges,
   Node,
-  useReactFlow,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './App.css';
