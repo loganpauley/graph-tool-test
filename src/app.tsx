@@ -57,6 +57,8 @@ function App() {
         labelBgStyle: { fill: '#fff', fillOpacity: 0.7 },
         labelBgPadding: [4, 4],
         labelBgBorderRadius: 4,
+        type: 'default',
+        labelShowBg: true,
       };
       setEdges((eds) => addEdge(newEdge, eds));
     },
@@ -116,6 +118,8 @@ function App() {
                 labelBgStyle: { fill: '#fff', fillOpacity: 0.7 },
                 labelBgPadding: [4, 4],
                 labelBgBorderRadius: 4,
+                type: 'default',
+                labelShowBg: true,
               }
             : edge
         )
@@ -180,6 +184,8 @@ function App() {
             labelBgStyle: { fill: '#fff', fillOpacity: 0.7 },
             labelBgPadding: [4, 4],
             labelBgBorderRadius: 4,
+            type: 'default',
+            labelShowBg: true,
           }}
         >
           <Background />

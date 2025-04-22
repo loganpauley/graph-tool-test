@@ -66,11 +66,15 @@
 .react-flow__edge-text {
     font-size: 12px;
     pointer-events: all;
+    dominant-baseline: middle;
+    text-anchor: middle;
 }
 
 .react-flow__edge-textbg {
     fill: white;
     fill-opacity: 0.7;
+    rx: 4;
+    ry: 4;
 }
 
 .react-flow__node-input {
