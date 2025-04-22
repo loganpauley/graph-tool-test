@@ -11,8 +11,6 @@ import ReactFlow, {
   useEdgesState,
   applyNodeChanges,
   applyEdgeChanges,
-  Panel,
-  EdgeText,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './App.css';
@@ -88,7 +86,7 @@ function App() {
     setIsModalOpen(false);
   };
 
-  const handleEdgeClick = (event: React.MouseEvent, edge: any) => {
+  const handleEdgeClick = (_event: React.MouseEvent, edge: any) => {
     setEditingEdge(edge.id);
     setEdgeLabel(edge.data?.label || '');
   };
@@ -121,14 +119,27 @@ function App() {
           type="file"
           accept=".csv"
           onChange={handleFileUpload}
-          style={{ margin: '10px' }}
+          style={{ margin: '10px', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
         />
-        <button onClick={handleAddNode} style={{ margin: '10px', padding: '5px 10px' }}>
+        <button 
+          onClick={handleAddNode} 
+          style={{ 
+            margin: '10px', 
+            padding: '8px 16px',
+            backgroundColor: '#4CAF50',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontWeight: 'bold'
+          }}
+        >
           Add New Node
         </button>
         {isLoading && <div style={{ margin: '10px' }}>Processing file...</div>}
       </div>
-      <div className="graph-container">
+      <div className="graph-container" style={{ position: 'relative', width: '100%', height: '100%' }}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -138,11 +149,11 @@ function App() {
           onEdgeClick={handleEdgeClick}
           fitView
           defaultViewport={{ x: 0, y: 0, zoom: 1 }}
-          connectionMode="loose"
+          style={{ width: '100%', height: '100%' }}
         >
           <Background />
-          <Controls />
-          <MiniMap />
+          <Controls style={{ position: 'absolute', right: 10, top: 10 }} />
+          <MiniMap style={{ position: 'absolute', right: 10, bottom: 10 }} />
         </ReactFlow>
       </div>
 
