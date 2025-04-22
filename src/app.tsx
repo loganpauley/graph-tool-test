@@ -13,10 +13,20 @@ import ReactFlow, {
   applyEdgeChanges,
   NodeTypes,
   EdgeTypes,
+  Node,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './App.css';
 import { parseCSV } from './utils/dataParser';
+
+// Define custom node types
+const nodeTypes = {
+  default: ({ data }: { data: { label: string } }) => (
+    <div style={{ padding: '10px', border: '1px solid #1a192b', borderRadius: '3px', background: 'white' }}>
+      {data.label}
+    </div>
+  ),
+};
 
 function App() {
   const [nodes, setNodes] = useNodesState([]);
@@ -77,11 +87,11 @@ function App() {
   const handleCreateNode = () => {
     if (!newNodeName.trim()) return;
 
-    const newNode = {
+    const newNode: Node = {
       id: newNodeName,
+      type: 'default',
       data: { label: newNodeName },
       position: { x: Math.random() * 800, y: Math.random() * 600 },
-      type: 'default',
     };
 
     setNodes((nds) => [...nds, newNode]);
@@ -162,6 +172,7 @@ function App() {
           attributionPosition="bottom-right"
           minZoom={0.5}
           maxZoom={2}
+          nodeTypes={nodeTypes}
           defaultEdgeOptions={{
             animated: false,
             style: { stroke: '#b1b1b7', strokeWidth: 2 },
